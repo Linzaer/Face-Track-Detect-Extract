@@ -16,7 +16,7 @@
 ```sh
 python3 start.py /home/admin/videos 
 ```
-* Then you can find  extracted faces stored in the floder **./facepics** .
+* Then you can find extracted faces stored in the floder **./facepics** .
 
 
 ## Special Thanks to:
