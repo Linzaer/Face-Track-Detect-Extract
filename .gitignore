@@ -1,0 +1,10 @@
+.idea/
+logs
+model
+compare_result
+cropdirectory
+static
+led / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
