@@ -5,11 +5,11 @@
 ## Introduction
 * **Dependencies:**
 	* Python 3.5+
-	* dlib
-	* scikit-learn
+	* Dlib
+	* Scikit-learn
 	* MTCNN
-	* numpy
-	* scikit-image
+	* Numpy
+	* Scikit-image
 
 ## Run
 * To run the python version of the code you have to put all the input videos in one folder like **/home/admin/videos** and then provide the path of that folder as command line argument:
