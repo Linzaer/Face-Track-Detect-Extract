@@ -29,9 +29,7 @@ def main():
 
     logger.info('Start track and extract......')
     with tf.Graph().as_default():
-        with tf.Session(
-                config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True),
-                                      log_device_placement=False)) as sess:
+        with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), log_device_placement=False)) as sess:
             pnet, rnet, onet = detect_face.create_mtcnn(sess, os.path.join(project_dir, "align"))
 
             margin = 50
@@ -66,8 +64,7 @@ def main():
                     r_g_b_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     if c % frame_interval == 0:
                         img_size = np.asarray(frame.shape)[0:2]
-                        faces, points = detect_face.detect_face(r_g_b_frame, minsize, pnet, rnet, onet, threshold,
-                                                                factor)
+                        faces, points = detect_face.detect_face(r_g_b_frame, minsize, pnet, rnet, onet, threshold, factor)
                         face_sums = faces.shape[0]
                         if face_sums > 0:
                             face_list = []
@@ -107,8 +104,7 @@ def main():
 
                             final_faces = np.array(face_list)
 
-                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list,
-                                              r_g_b_frame)
+                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list, r_g_b_frame)
 
                     c += 1
 
