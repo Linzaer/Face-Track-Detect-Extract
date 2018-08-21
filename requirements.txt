@@ -1,4 +1,3 @@
-tensorflow
 scipy
 scikit-learn
 opencv-python
@@ -7,3 +6,6 @@ matplotlib
 Pillow
 requests
 psutil
+dlib
+tensorflow
+numpy
