@@ -6,10 +6,11 @@ import cv2
 import numpy as np
 import tensorflow as tf
 from lib.face_utils import judge_side_face
-from lib.utils import Logger
+from lib.utils import Logger, mkdir
+from project_root_dir import project_dir
 from src.sort import Sort
 
-logger = Logger("MOT")
+logger = Logger(__name__)
 
 
 def main():
@@ -18,22 +19,20 @@ def main():
     root_dir = args.root_dir
     output_path = args.output_path
     display = args.display
-
-    cam = cv2.VideoCapture("rtmp://live.hkstv.hk.lxdns.com/live/hks")
-    # cam = cv2.VideoCapture("/home/linzai/Videos/people2.avi")
-
+    mkdir(output_path)
     # for disp
     if display:
-        colours = np.random.rand(32, 3)  # used only for display
+        colours = np.random.rand(32, 3)
 
     # init tracker
     tracker = Sort()  # create instance of the SORT tracker
 
-    logger.info('开始人脸识别追踪合并......')
+    logger.info('start track and extract......')
     with tf.Graph().as_default():
         with tf.Session(
-                config=tf.ConfigProto(device_count={'GPU': 1}, gpu_options=tf.GPUOptions(allow_growth=True), log_device_placement=False)) as sess:
-            pnet, rnet, onet = detect_face.create_mtcnn(sess, '../align')
+                config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True),
+                                      log_device_placement=False)) as sess:
+            pnet, rnet, onet = detect_face.create_mtcnn(sess, os.path.join(project_dir, "align"))
 
             margin = 50
             minsize = 200  # minimum size of face
@@ -67,7 +66,8 @@ def main():
                     r_g_b_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     if c % frame_interval == 0:
                         img_size = np.asarray(frame.shape)[0:2]
-                        faces, points = detect_face.detect_face(r_g_b_frame, minsize, pnet, rnet, onet, threshold, factor)
+                        faces, points = detect_face.detect_face(r_g_b_frame, minsize, pnet, rnet, onet, threshold,
+                                                                factor)
                         face_sums = faces.shape[0]
                         if face_sums > 0:
                             face_list = []
@@ -95,9 +95,10 @@ def main():
                                     for j in range(5):
                                         item = [tolist[j], tolist[(j + 5)]]
                                         facial_landmarks.append(item)
-                                    # for (x, y) in facial_landmarks:
-                                    #     cv2.circle(frame_copy, (int(x), int(y)), 3, (0, 255, 0), -1)
-                                    dist_rate, high_ratio_variance, width_rate = judge_side_face(np.array(facial_landmarks))
+                                    for (x, y) in facial_landmarks:
+                                        cv2.circle(frame_copy, (int(x), int(y)), 3, (0, 255, 0), -1)
+                                    dist_rate, high_ratio_variance, width_rate = judge_side_face(
+                                        np.array(facial_landmarks))
 
                                     # face addtional attribute(index 0:face score; index 1:0 represents front face and 1 for side face )
                                     item_list = [cropped, faces[i, 4], dist_rate, high_ratio_variance, width_rate]
@@ -105,18 +106,19 @@ def main():
 
                             final_faces = np.array(face_list)
 
-                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list, r_g_b_frame)
+                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list,
+                                              r_g_b_frame)
 
                     c += 1
 
                     for d in trackers:
                         if display:
                             d = d.astype(np.int32)
-                            cv2.rectangle(frame, (d[0], d[1]), (d[2], d[3]), colours[d[4] % 32, :] * 255, 2)
+                            cv2.rectangle(frame, (d[0], d[1]), (d[2], d[3]), colours[d[4] % 32, :] * 255, 5)
                             cv2.putText(frame, 'ID : %d' % (d[4]), (d[0] - 10, d[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
                                         0.75,
                                         colours[d[4] % 32, :] * 255, 2)
-                            if final_faces != []:  # detector is active in this frame
+                            if final_faces != []:
                                 cv2.putText(frame, 'DETECTOR', (5, 45), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                                             (1, 1, 1), 2)
                     if display:
@@ -130,10 +132,10 @@ def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--root_dir", type=str,
-                        help='Path to the data directory containing aligned your face patches.',
-                        default='/home/linzai/Videos/Face')
+                        help='Path to the data directory containing aligned your face patches.')
     parser.add_argument('--output_path', type=str,
-                        help='Path to save face', default='/home/linzai/Pictures/vidio_extract_face')
+                        help='Path to save face',
+                        default='../facepics')
     parser.add_argument('--display', type=bool,
                         help='Display or not', default=True)
     args = parser.parse_args()

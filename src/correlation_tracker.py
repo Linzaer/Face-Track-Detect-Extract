@@ -1,5 +1,5 @@
 """
-@author: Mahmoud I.Zidan
+@author: Mahmoud I.Zidan & Linzai
 """
 
 from dlib import correlation_tracker, rectangle
@@ -12,7 +12,7 @@ class CorrelationTracker:
 
     def __init__(self, bbox, img):
         self.tracker = correlation_tracker()
-        self.tracker.start_track(img, rectangle(long(bbox[0]), long(bbox[1]), long(bbox[2]), long(bbox[3])))
+        self.tracker.start_track(img, rectangle(int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])))
         self.confidence = 0.  # measures how confident the tracker is! (a.k.a. correlation score)
 
         self.time_since_update = 0
@@ -39,7 +39,7 @@ class CorrelationTracker:
 
         '''re-start the tracker with detected positions (it detector was active)'''
         if bbox != []:
-            self.tracker.start_track(img, rectangle(long(bbox[0]), long(bbox[1]), long(bbox[2]), long(bbox[3])))
+            self.tracker.start_track(img, rectangle(int(bbox[0]), int(bbox[1]), int(bbox[2]), int(bbox[3])))
         '''
         Note: another approach is to re-start the tracker only when the correlation score fall below some threshold
         i.e.: if bbox !=[] and self.confidence < 10.

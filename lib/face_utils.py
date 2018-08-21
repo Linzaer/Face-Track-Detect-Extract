@@ -5,7 +5,6 @@ def judge_side_face(facial_landmarks):
     wide_dist = np.linalg.norm(facial_landmarks[0] - facial_landmarks[1])
     high_dist = np.linalg.norm(facial_landmarks[0] - facial_landmarks[3])
     dist_rate = high_dist / wide_dist
-    # print("wide:{0} ,high:{1} ,rate:{2}".format(wide_dist, high_dist, dist_rate))
 
     # cal std
     vec_A = facial_landmarks[0] - facial_landmarks[2]
@@ -16,18 +15,11 @@ def judge_side_face(facial_landmarks):
     dist_B = np.linalg.norm(vec_B)
     dist_C = np.linalg.norm(vec_C)
     dist_D = np.linalg.norm(vec_D)
-    # dist_list = [dist_A, dist_B, dist_C, dist_D]
-    # std = np.std(dist_list)
 
     # cal rate
     high_rate = dist_A / dist_C
     width_rate = dist_C / dist_D
     high_ratio_variance = np.fabs(high_rate - 1.1)  # smaller is better
     width_ratio_variance = np.fabs(width_rate - 1)
-
-    landmarks_x_distance_C = np.abs(facial_landmarks[2][0] - facial_landmarks[3][0])
-    landmarks_x_distance_D = np.abs(facial_landmarks[2][0] - facial_landmarks[4][0])
-    x_width_ratio_variance = landmarks_x_distance_C / landmarks_x_distance_D
-    np_abs = np.abs(x_width_ratio_variance - 1)
 
     return dist_rate, high_ratio_variance, width_ratio_variance

@@ -4,13 +4,13 @@ As implemented in https://github.com/abewley/sort but with some modifications
 
 from __future__ import print_function
 
-import lib.utils
+import lib.utils as utils
 import numpy as np
 from src.correlation_tracker import CorrelationTracker
 from src.data_association import associate_detections_to_trackers
 from src.kalman_tracker import KalmanBoxTracker
 
-logger = lib.utils.Logger("MOT")
+logger = utils.Logger("MOT")
 
 
 class Sort:
