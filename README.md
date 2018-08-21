@@ -1,13 +1,13 @@
 # Face Detection & Tracking & Extract
 
-   This project can **detect** , **track** and **extract** the optimal face in multi-target faces (exclude side face and select the optimal face).
+   This project can **detect** , **track** and **extract** the **optimal** face in multi-target faces (exclude side face and select the optimal face).
    
 ## Introduction
 * **Dependencies:**
 	* Python 3.5+
+	* [**MTCNN**](https://github.com/davidsandberg/facenet/tree/master/src/align)
 	* Dlib
 	* Scikit-learn
-	* MTCNN
 	* Numpy
 	* Scikit-image
 

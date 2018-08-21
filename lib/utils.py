@@ -36,7 +36,7 @@ def save_to_file(root_dic, tracker):
 
 class Logger():
 
-    def __init__(self, module_name) -> None:
+    def __init__(self, module_name="MOT") -> None:
         super().__init__()
         path_join = os.path.join(log_file_root_path, module_name)
         mkdir(path_join)

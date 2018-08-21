@@ -10,7 +10,7 @@ from lib.utils import Logger, mkdir
 from project_root_dir import project_dir
 from src.sort import Sort
 
-logger = Logger(__name__)
+logger = Logger()
 
 
 def main():
@@ -27,7 +27,7 @@ def main():
     # init tracker
     tracker = Sort()  # create instance of the SORT tracker
 
-    logger.info('start track and extract......')
+    logger.info('Start track and extract......')
     with tf.Graph().as_default():
         with tf.Session(
                 config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True),
@@ -42,13 +42,13 @@ def main():
             scale_rate = 0.9
             show_rate = 0.6
             for filename in os.listdir(root_dir):
-                logger.info('all files:{}'.format(filename))
+                logger.info('All files:{}'.format(filename))
             for filename in os.listdir(root_dir):
                 if filename.split('.')[1] != 'mp4':
                     continue
                 video_name = os.path.join(root_dir, filename)
                 directoryname = os.path.join(output_path, filename.split('.')[0])
-                logger.info('video_name:{}'.format(video_name))
+                logger.info('Video_name:{}'.format(video_name))
                 cam = cv2.VideoCapture(video_name)
                 c = 0
                 while True:
