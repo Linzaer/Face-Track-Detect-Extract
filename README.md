@@ -12,7 +12,7 @@
 	* scikit-image
 
 ## Run
-* To run the python version of the code you have to put all the input videos in one folder and then provide the path of that folder as command line argument:
+* To run the python version of the code you have to put all the input videos in one folder like **/home/admin/videos** and then provide the path of that folder as command line argument:
 ```sh
 python3 start.py /home/admin/videos 
 ```
