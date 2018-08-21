@@ -1,6 +1,6 @@
 # Face Detection & Tracking & Extract
 
-   该工程可以多目标的人脸进行检测、跟踪并且提取人脸最优解(排除侧脸，选取正面)。
+   This project can detect,track and extract the optimal face in multi-target faces (exclude side face and select the optimal face).
    
 ## Introduction
 * **Dependencies:**
