@@ -95,8 +95,9 @@ def main():
                                     for j in range(5):
                                         item = [tolist[j], tolist[(j + 5)]]
                                         facial_landmarks.append(item)
-                                    for (x, y) in facial_landmarks:
-                                        cv2.circle(frame_copy, (int(x), int(y)), 3, (0, 255, 0), -1)
+                                    if args.face_landmarks:
+                                        for (x, y) in facial_landmarks:
+                                            cv2.circle(frame_copy, (int(x), int(y)), 3, (0, 255, 0), -1)
                                     dist_rate, high_ratio_variance, width_rate = judge_side_face(
                                         np.array(facial_landmarks))
 
@@ -131,13 +132,15 @@ def main():
 def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root_dir", type=str,
+    parser.add_argument("root_dir", type=str,
                         help='Path to the data directory containing aligned your face patches.')
     parser.add_argument('--output_path', type=str,
                         help='Path to save face',
-                        default='../facepics')
+                        default='facepics')
     parser.add_argument('--display', type=bool,
                         help='Display or not', default=True)
+    parser.add_argument('--face_landmarks', type=bool,
+                        help='draw 5 face landmarks on extracted face or not ', default=False)
     args = parser.parse_args()
     return args
 

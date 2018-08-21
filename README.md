@@ -1,2 +1,23 @@
-# face-track-detect-extract
-一个在视频中对多目标的人脸进行检测、跟踪并且提取人脸最优解(排除侧脸)的python项目
+# Face Detection & Tracking & Extract
+
+   该工程可以多目标的人脸进行检测、跟踪并且提取人脸最优解(排除侧脸，选取正面)。
+   
+## Introduction
+* **Dependencies:**
+	* Python 3.5+
+	* dlib
+	* scikit-learn
+	* MTCNN
+	* numpy
+	* scikit-image
+
+## Run
+* To run the python version of the code you have to put all the input videos in one folder and then provide the path of that folder as command line argument:
+```sh
+python3 start.py /home/admin/videos 
+```
+
+
+## Special Thanks to:
+*  [**experimenting-with-sort**](https://github.com/ZidanMusk/experimenting-with-sort) 
+

@@ -7,5 +7,4 @@ Pillow
 requests
 psutil
 dlib
-tensorflow
 numpy
