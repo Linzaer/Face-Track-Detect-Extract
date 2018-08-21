@@ -1,6 +1,6 @@
 # Face Detection & Tracking & Extract
 
-   This project can detect,track and extract the optimal face in multi-target faces (exclude side face and select the optimal face).
+   This project can **detect** , **track** and **extract** the optimal face in multi-target faces (exclude side face and select the optimal face).
    
 ## Introduction
 * **Dependencies:**
