@@ -17,6 +17,8 @@
 python3 start.py /home/admin/videos 
 ```
 * Then you can find extracted faces stored in the floder **./facepics** .
+* If you want to draw 5 face lanmarks on the face extracted,you can make the argument **face_landmarks** True:
+
 
 ## Results
 ![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic1.jpg "scene 1")
