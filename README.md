@@ -2,7 +2,6 @@
 
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/Django.svg)
-![Travis (.org)](https://img.shields.io/travis/USER/REPO.svg)
 
    This project can **detect** , **track** and **extract** the **optimal** face in multi-target faces (exclude side face and select the optimal face).
    
