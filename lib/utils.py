@@ -22,12 +22,12 @@ def mkdir(path):
 def save_to_file(root_dic, tracker):
     filter_face_addtional_attribute_list = []
     for item in tracker.face_addtional_attribute:
-        if item[2] < 1.4 and item[4] < 1:
+        if item[2] < 1.4 and item[4] < 1: # recommended thresold value
             filter_face_addtional_attribute_list.append(item)
     if (len(filter_face_addtional_attribute_list) > 0):
         score_reverse_sorted_list = sorted(filter_face_addtional_attribute_list, key=itemgetter(4))
         for i, item in enumerate(score_reverse_sorted_list):
-            if item[1] > 0.99:
+            if item[1] > 0.99: # face score from MTCNN ,max = 1
                 mkdir(root_dic)
                 cv2.imwrite(
                     "{0}/{1}.jpg".format(root_dic, str(uuid.uuid1())), item[0])
