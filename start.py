@@ -32,13 +32,13 @@ def main():
         with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), log_device_placement=False)) as sess:
             pnet, rnet, onet = detect_face.create_mtcnn(sess, os.path.join(project_dir, "align"))
 
-            margin = 50
-            minsize = 200  # minimum size of face
+            margin = 40 # if the face is big in your video ,you can make it bigger 
+            minsize = 40  # minimum size of face
             threshold = [0.6, 0.7, 0.7]  # three steps's threshold
             factor = 0.709  # scale factor
-            frame_interval = 3
+            frame_interval = 3 #interval how many frames to make a detection
             scale_rate = 0.9
-            show_rate = 0.6
+            show_rate = 0.8
             for filename in os.listdir(root_dir):
                 logger.info('All files:{}'.format(filename))
             for filename in os.listdir(root_dir):
