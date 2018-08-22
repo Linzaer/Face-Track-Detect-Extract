@@ -18,7 +18,7 @@
 python3 start.py /home/admin/videos 
 ```
 * Then you can find  faces extracted stored in the floder **./facepics** .
-* If you want to draw 5 face landmarks on the face extracted,you can make the argument **face_landmarks** True
+* If you want to draw 5 face landmarks on the face extracted,you can make the argument **face_landmarks** to be **True**
 
 
 ## Results
