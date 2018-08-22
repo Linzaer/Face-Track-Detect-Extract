@@ -32,17 +32,19 @@ def main():
         with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), log_device_placement=False)) as sess:
             pnet, rnet, onet = detect_face.create_mtcnn(sess, os.path.join(project_dir, "align"))
 
-            margin = 40 # if the face is big in your video ,you can make it bigger 
-            minsize = 40  # minimum size of face
+            margin = 40  # if the face is big in your video ,you can set it bigger for tracking easiler
+            minsize = 40  # minimum size of face for mtcnn to detect
             threshold = [0.6, 0.7, 0.7]  # three steps's threshold
             factor = 0.709  # scale factor
-            frame_interval = 3 #interval how many frames to make a detection
-            scale_rate = 0.9
-            show_rate = 0.8
+            frame_interval = 3  # interval how many frames to make a detection,you need to keep a balance between performance and fluency
+            scale_rate = 0.9  # if set it smaller will make input frames smaller
+            show_rate = 0.8  # if set it smaller will dispaly smaller frames
+
             for filename in os.listdir(root_dir):
                 logger.info('All files:{}'.format(filename))
             for filename in os.listdir(root_dir):
-                if filename.split('.')[1] != 'mp4':
+                suffix = filename.split('.')[1]
+                if suffix != 'mp4' and suffix != 'avi':  # you can specify more video formats if you need
                     continue
                 video_name = os.path.join(root_dir, filename)
                 directoryname = os.path.join(output_path, filename.split('.')[0])
