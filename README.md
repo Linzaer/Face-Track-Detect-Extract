@@ -19,9 +19,9 @@ python3 start.py /home/admin/videos
 * Then you can find extracted faces stored in the floder **./facepics** .
 
 ## Results
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic1.jpg "Logo Title Text 1")
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic2.jpg "Logo Title Text 1")
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic3.jpg "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic1.jpg "scene 1")
+![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic2.jpg "scene 2")
+![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic3.jpg "extracted faces")
 
 ## Special Thanks to:
 *  [**experimenting-with-sort**](https://github.com/ZidanMusk/experimenting-with-sort) 
