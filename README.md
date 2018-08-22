@@ -27,7 +27,8 @@ python3 start.py /home/admin/videos --face_landmarks True
 ```
 ## What can this project do?
 
-* You can run it to extract the optimal face for everyone from a lot of videos and use it as a training set for **CNN training**.
+* You can run it to extract the optimal face for everyone from a lot of videos and use it as a training set for **CNN Training**.
+* You can also send the extracted face to the backend for **Face Recognition**.
 
 
 
