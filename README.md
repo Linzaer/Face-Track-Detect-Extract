@@ -5,6 +5,7 @@
 ## Introduction
 * **Dependencies:**
 	* Python 3.5+
+	* Tensorflow
 	* [**MTCNN**](https://github.com/davidsandberg/facenet/tree/master/src/align)
 	* Dlib
 	* Scikit-learn
