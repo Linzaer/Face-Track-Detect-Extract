@@ -18,6 +18,10 @@ python3 start.py /home/admin/videos
 ```
 * Then you can find extracted faces stored in the floder **./facepics** .
 
+## Results
+![alt text](https://raw.githubusercontent.com/ITCoders/Human-detection-and-Tracking/master/results/g.jpg "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/ITCoders/Human-detection-and-Tracking/master/results/k.jpg "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/ITCoders/Human-detection-and-Tracking/master/results/k.jpg "Logo Title Text 1")
 
 ## Special Thanks to:
 *  [**experimenting-with-sort**](https://github.com/ZidanMusk/experimenting-with-sort) 
