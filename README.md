@@ -33,9 +33,8 @@ python3 start.py /home/admin/videos --face_landmarks True
 
 
 ## Results
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic1.jpg "scene 1")
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic2.jpg "scene 2")
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic3.jpg "faces extracted")
+![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic4.jif "scene 1")
+![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic5.jpg "faces extracted")
 
 ## Special Thanks to:
 *  [**experimenting-with-sort**](https://github.com/ZidanMusk/experimenting-with-sort) 
