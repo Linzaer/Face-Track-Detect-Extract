@@ -33,7 +33,7 @@ python3 start.py /home/admin/videos --face_landmarks True
 
 
 ## Results
-![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic4.jif "scene 1")
+![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic4.gif "scene 1")
 ![alt text](https://raw.githubusercontent.com/wiki/Linzaer/Face-Track-Detect-Extract/pic5.jpg "faces extracted")
 
 ## Special Thanks to:
