@@ -1,11 +1,6 @@
-scipy
+numba
 scikit-learn
 opencv-python
-h5py
-matplotlib
-Pillow
-requests
-psutil
-dlib
 numpy
 filterpy
+tensorflow-gpu

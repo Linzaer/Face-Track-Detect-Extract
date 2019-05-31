@@ -1,5 +1,6 @@
 import argparse
 import os
+from time import time
 
 import align.detect_face as detect_face
 import cv2
@@ -16,12 +17,18 @@ logger = Logger()
 def main():
     global colours, img_size
     args = parse_args()
-    root_dir = args.root_dir
+    videos_dir = args.videos_dir
     output_path = args.output_path
-    display = args.display
+    no_display = args.no_display
+    detect_interval = args.detect_interval  # you need to keep a balance between performance and fluency
+    margin = args.margin  # if the face is big in your video ,you can set it bigger for tracking easiler
+    scale_rate = args.scale_rate  # if set it smaller will make input frames smaller
+    show_rate = args.show_rate  # if set it smaller will dispaly smaller frames
+    face_score_threshold = args.face_score_threshold
+
     mkdir(output_path)
-    # for disp
-    if display:
+    # for display
+    if not no_display:
         colours = np.random.rand(32, 3)
 
     # init tracker
@@ -29,24 +36,21 @@ def main():
 
     logger.info('Start track and extract......')
     with tf.Graph().as_default():
-        with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True), log_device_placement=False)) as sess:
+        with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True),
+                                              log_device_placement=False)) as sess:
             pnet, rnet, onet = detect_face.create_mtcnn(sess, os.path.join(project_dir, "align"))
 
-            margin = 40  # if the face is big in your video ,you can set it bigger for tracking easiler
             minsize = 40  # minimum size of face for mtcnn to detect
             threshold = [0.6, 0.7, 0.7]  # three steps's threshold
             factor = 0.709  # scale factor
-            frame_interval = 3  # interval how many frames to make a detection,you need to keep a balance between performance and fluency
-            scale_rate = 0.9  # if set it smaller will make input frames smaller
-            show_rate = 0.8  # if set it smaller will dispaly smaller frames
 
-            for filename in os.listdir(root_dir):
+            for filename in os.listdir(videos_dir):
                 logger.info('All files:{}'.format(filename))
-            for filename in os.listdir(root_dir):
+            for filename in os.listdir(videos_dir):
                 suffix = filename.split('.')[1]
                 if suffix != 'mp4' and suffix != 'avi':  # you can specify more video formats if you need
                     continue
-                video_name = os.path.join(root_dir, filename)
+                video_name = os.path.join(videos_dir, filename)
                 directoryname = os.path.join(output_path, filename.split('.')[0])
                 logger.info('Video_name:{}'.format(video_name))
                 cam = cv2.VideoCapture(video_name)
@@ -64,15 +68,19 @@ def main():
 
                     frame = cv2.resize(frame, (0, 0), fx=scale_rate, fy=scale_rate)
                     r_g_b_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    if c % frame_interval == 0:
+                    if c % detect_interval == 0:
                         img_size = np.asarray(frame.shape)[0:2]
-                        faces, points = detect_face.detect_face(r_g_b_frame, minsize, pnet, rnet, onet, threshold, factor)
+                        mtcnn_starttime = time()
+                        faces, points = detect_face.detect_face(r_g_b_frame, minsize, pnet, rnet, onet, threshold,
+                                                                factor)
+                        logger.info("MTCNN detect face cost time : {} s".format(
+                            round(time() - mtcnn_starttime, 3)))  # mtcnn detect ,slow
                         face_sums = faces.shape[0]
                         if face_sums > 0:
                             face_list = []
                             for i, item in enumerate(faces):
-                                f = round(faces[i, 4], 6)
-                                if f > 0.99:
+                                score = round(faces[i, 4], 6)
+                                if score > face_score_threshold:
                                     det = np.squeeze(faces[i, 0:4])
 
                                     # face rectangle
@@ -84,8 +92,8 @@ def main():
 
                                     # face cropped
                                     bb = np.array(det, dtype=np.int32)
-                                    frame_copy = frame.copy()
-                                    cropped = frame_copy[bb[1]:bb[3], bb[0]:bb[2], :]
+
+                                    # cropped = frame[bb[1]:bb[3], bb[0]:bb[2], :].copy()
 
                                     # use 5 face landmarks  to judge the face is front or side
                                     squeeze_points = np.squeeze(points[:, i])
@@ -96,31 +104,41 @@ def main():
                                         facial_landmarks.append(item)
                                     if args.face_landmarks:
                                         for (x, y) in facial_landmarks:
-                                            cv2.circle(frame_copy, (int(x), int(y)), 3, (0, 255, 0), -1)
+                                            cv2.circle(frame, (int(x), int(y)), 3, (0, 255, 0), -1)
+                                    cropped = frame[bb[1]:bb[3], bb[0]:bb[2], :].copy()
+
                                     dist_rate, high_ratio_variance, width_rate = judge_side_face(
                                         np.array(facial_landmarks))
 
                                     # face addtional attribute(index 0:face score; index 1:0 represents front face and 1 for side face )
-                                    item_list = [cropped, faces[i, 4], dist_rate, high_ratio_variance, width_rate]
+                                    item_list = [cropped, score, dist_rate, high_ratio_variance, width_rate]
                                     addtional_attribute_list.append(item_list)
 
                             final_faces = np.array(face_list)
 
-                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list, r_g_b_frame)
+                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list,detect_interval)
 
                     c += 1
 
                     for d in trackers:
-                        if display:
+                        if not no_display:
                             d = d.astype(np.int32)
-                            cv2.rectangle(frame, (d[0], d[1]), (d[2], d[3]), colours[d[4] % 32, :] * 255, 5)
-                            cv2.putText(frame, 'ID : %d' % (d[4]), (d[0] - 10, d[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                                        0.75,
-                                        colours[d[4] % 32, :] * 255, 2)
+                            cv2.rectangle(frame, (d[0], d[1]), (d[2], d[3]), colours[d[4] % 32, :] * 255, 3)
                             if final_faces != []:
+                                cv2.putText(frame, 'ID : %d  DETECT' % (d[4]), (d[0] - 10, d[1] - 10),
+                                            cv2.FONT_HERSHEY_SIMPLEX,
+                                            0.75,
+                                            colours[d[4] % 32, :] * 255, 2)
+                            else:
+                                cv2.putText(frame, 'ID : %d' % (d[4]), (d[0] - 10, d[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                                            0.75,
+                                            colours[d[4] % 32, :] * 255, 2)
+
+                            if final_faces != []:  # detector is active in this frame
                                 cv2.putText(frame, 'DETECTOR', (5, 45), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
                                             (1, 1, 1), 2)
-                    if display:
+
+                    if not no_display:
                         frame = cv2.resize(frame, (0, 0), fx=show_rate, fy=show_rate)
                         cv2.imshow("Frame", frame)
                         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -130,15 +148,30 @@ def main():
 def parse_args():
     """Parse input arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("root_dir", type=str,
-                        help='Path to the data directory containing aligned your face patches.')
+    parser.add_argument("--videos_dir", type=str,
+                        help='Path to the data directory containing aligned your face patches.', default='videos')
     parser.add_argument('--output_path', type=str,
                         help='Path to save face',
                         default='facepics')
-    parser.add_argument('--display', type=bool,
-                        help='Display or not', default=True)
-    parser.add_argument('--face_landmarks', type=bool,
-                        help='draw 5 face landmarks on extracted face or not ', default=False)
+    parser.add_argument('--detect_interval',
+                        help='how many frames to make a detection',
+                        type=int, default=1)
+    parser.add_argument('--margin',
+                        help='add margin for face',
+                        type=int, default=10)
+    parser.add_argument('--scale_rate',
+                        help='Scale down or enlarge the original video img',
+                        type=float, default=0.7)
+    parser.add_argument('--show_rate',
+                        help='Scale down or enlarge the imgs drawn by opencv',
+                        type=float, default=1)
+    parser.add_argument('--face_score_threshold',
+                        help='The threshold of the extracted faces',
+                        type=float, default=0.85)
+    parser.add_argument('--face_landmarks',
+                        help='Draw five face landmarks on extracted face or not ', action="store_true")
+    parser.add_argument('--no_display',
+                        help='Display or not', action='store_true')
     args = parser.parse_args()
     return args
 

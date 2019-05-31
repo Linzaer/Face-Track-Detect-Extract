@@ -10,20 +10,21 @@
 	* Python 3.5+
 	* Tensorflow
 	* [**MTCNN**](https://github.com/davidsandberg/facenet/tree/master/src/align)
-	* Dlib
 	* Scikit-learn
 	* Numpy
-	* Scikit-image
+	* Numba
+	* Opencv-python
+	* Filterpy
 
 ## Run
-* To run the python version of the code you have to put all the input videos in one folder like **/home/admin/videos** and then provide the path of that folder as command line argument:
+* To run the python version of the code :
 ```sh
-python3 start.py /home/admin/videos 
+python3 start.py
 ```
 * Then you can find  faces extracted stored in the floder **./facepics** .
-* If you want to draw 5 face landmarks on the face extracted,you can make the argument **face_landmarks** to be **True**
+* If you want to draw 5 face landmarks on the face extracted,you just add the argument **face_landmarks**
 ```sh
-python3 start.py /home/admin/videos --face_landmarks True
+python3 start.py /home/admin/videos --face_landmarks
 ```
 ## What can this project do?
 

@@ -14,7 +14,7 @@ class KalmanBoxTracker(object):
     """
     count = 0
 
-    def __init__(self, bbox, img=None):
+    def __init__(self, bbox):
         """
         Initialises a tracker using initial bounding box.
         """
@@ -41,10 +41,12 @@ class KalmanBoxTracker(object):
         self.hit_streak = 0
         self.age = 0
 
+        self.predict_num = 0  # 解决画面中无人脸检测到时而导致的原有追踪器人像预测的漂移bug
+
         # addtional fields
         self.face_addtional_attribute = []
 
-    def update(self, bbox, img=None):
+    def update(self, bbox):
         """
         Updates the state vector with observed bbox.
         """
@@ -54,16 +56,19 @@ class KalmanBoxTracker(object):
         self.hit_streak += 1
         if bbox != []:
             self.kf.update(convert_bbox_to_z(bbox))
+            self.predict_num = 0
+        else:
+            self.predict_num += 1
 
-    def predict(self, img=None):
+    def predict(self):
         """
         Advances the state vector and returns the predicted bounding box estimate.
         """
-        if ((self.kf.x[6] + self.kf.x[2]) <= 0):
+        if (self.kf.x[6] + self.kf.x[2]) <= 0:
             self.kf.x[6] *= 0.0
         self.kf.predict()
         self.age += 1
-        if (self.time_since_update > 0):
+        if self.time_since_update > 0:
             self.hit_streak = 0
         self.time_since_update += 1
         self.history.append(convert_x_to_bbox(self.kf.x))
@@ -98,7 +103,7 @@ def convert_x_to_bbox(x, score=None):
     """
     w = np.sqrt(x[2] * x[3])
     h = x[2] / w
-    if (score == None):
+    if score is None:
         return np.array([x[0] - w / 2., x[1] - h / 2., x[0] + w / 2., x[1] + h / 2.]).reshape((1, 4))
     else:
         return np.array([x[0] - w / 2., x[1] - h / 2., x[0] + w / 2., x[1] + h / 2., score]).reshape((1, 5))
