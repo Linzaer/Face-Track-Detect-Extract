@@ -116,7 +116,7 @@ def main():
 
                             final_faces = np.array(face_list)
 
-                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list,detect_interval)
+                    trackers = tracker.update(final_faces, img_size, directoryname, addtional_attribute_list, detect_interval)
 
                     c += 1
 
