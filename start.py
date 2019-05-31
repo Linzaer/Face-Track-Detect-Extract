@@ -93,8 +93,6 @@ def main():
                                     # face cropped
                                     bb = np.array(det, dtype=np.int32)
 
-                                    # cropped = frame[bb[1]:bb[3], bb[0]:bb[2], :].copy()
-
                                     # use 5 face landmarks  to judge the face is front or side
                                     squeeze_points = np.squeeze(points[:, i])
                                     tolist = squeeze_points.tolist()
