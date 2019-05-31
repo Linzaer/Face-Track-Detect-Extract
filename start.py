@@ -127,14 +127,12 @@ def main():
                                             cv2.FONT_HERSHEY_SIMPLEX,
                                             0.75,
                                             colours[d[4] % 32, :] * 255, 2)
+                                cv2.putText(frame, 'DETECTOR', (5, 45), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
+                                            (1, 1, 1), 2)
                             else:
                                 cv2.putText(frame, 'ID : %d' % (d[4]), (d[0] - 10, d[1] - 10), cv2.FONT_HERSHEY_SIMPLEX,
                                             0.75,
                                             colours[d[4] % 32, :] * 255, 2)
-
-                            if final_faces != []:  # detector is active in this frame
-                                cv2.putText(frame, 'DETECTOR', (5, 45), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                                            (1, 1, 1), 2)
 
                     if not no_display:
                         frame = cv2.resize(frame, (0, 0), fx=show_rate, fy=show_rate)
