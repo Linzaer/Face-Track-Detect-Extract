@@ -162,7 +162,7 @@ def parse_args():
                         help='Scale down or enlarge the imgs drawn by opencv',
                         type=float, default=1)
     parser.add_argument('--face_score_threshold',
-                        help='The threshold of the extracted faces',
+                        help='The threshold of the extracted faces,range 0<x<=1',
                         type=float, default=0.85)
     parser.add_argument('--face_landmarks',
                         help='Draw five face landmarks on extracted face or not ', action="store_true")
